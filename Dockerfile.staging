@@ -1,0 +1,11 @@
+# production environment
+FROM node:current-alpine3.15
+WORKDIR /home/node/app
+COPY package*.json ./
+COPY server ./
+COPY certificates/dntroster.com_2022.crt ./
+COPY certificates/dntroster.com.key ./ 
+COPY certificates/CA.crt ./
+RUN npm install
+EXPOSE 3001
+CMD ["node", "server.js"]
