@@ -5,20 +5,19 @@ import tokenService from '../../services/tokenService'
 import { URLSearchParams } from 'url'
 import DiscordUser, { DiscordUserToken } from '../../types/discord_user_type'
 
-const discord = express.Router()
+const router = express.Router()
 const API_ENDPOINT = 'https://discord.com/api'
 const CLIENT_ID = '944735010311786537'
 const CLIENT_SECRET = process.env.CLIENT_SECRET ?? ''
 const REDIRECT_URI = process.env.REDIRECT_URI ?? ''
 
-discord.post('/login/:code', (req, res) => {
-  console.info('Fetching token for code: ' + req.params.code)
+router.post('/login/:code', (req, res) => {
   let discordUser: DiscordUser
 
   assembleTokenUserFromCode(req.params.code).then((discordtoken: any) => {
     assembleUserFromUserToken(discordtoken).then(user => {
       discordUser = user
-      dbUserService.saveDiscordUserToDatabase(user).then(resp => {
+      dbUserService.saveDiscordUserToDatabase(user).then(() => {
         const token = tokenService.getJWTTokenForDiscordUser(discordUser)
         const response = { token }
         res.json(response)
@@ -87,4 +86,4 @@ interface DiscordUserGuild {
   id: string
 }
 
-export default discord
+export default router

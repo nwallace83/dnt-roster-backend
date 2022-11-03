@@ -2,12 +2,13 @@ import UserModelDB from '../models/userModelDB'
 import DiscordUser from '../types/discord_user_type'
 import User from '../types/user_type'
 
-function getUserById (userid: string) {
-  return UserModelDB.findOne({ id: userid })
-}
-
-function updateLastLoginById (userid: string) {
-  return UserModelDB.findOne({ id: userid })
+async function getUserById (userid: string) {
+  const fetchedUser = await UserModelDB.findOne({ id: userid }, { _id: 0, __v: 0 })
+  if (fetchedUser == null) {
+    return await Promise.reject(new Error('User not found: ' + userid))
+  } else {
+    return await Promise.resolve(fetchedUser as User)
+  }
 }
 
 function saveDiscordUserToDatabase (discordUser: DiscordUser) {
@@ -26,6 +27,6 @@ function saveDiscordUserToDatabase (discordUser: DiscordUser) {
   return UserModelDB.updateOne({ id: discordUser.id }, userToSave, { upsert: true })
 }
 
-const dbUserService = { saveDiscordUserToDatabase, getUserById, updateLastLoginById }
+const dbUserService = { saveDiscordUserToDatabase, getUserById }
 
 export default dbUserService

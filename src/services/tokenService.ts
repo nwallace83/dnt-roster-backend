@@ -8,14 +8,11 @@ const jwtKey: Secret = process.env.JWT_KEY as Secret
 const THIRTY_DAYS = 604800000
 
 function decodeWebToken (token: string) {
-  if (jwtKey != null) {
-    try {
-      const decodedWebToken = jwt.verify(token, jwtKey) as DecodedWebToken
-      return decodedWebToken
-    } catch {
-      return null
-    }
-  } else {
+  try {
+    const decodedWebToken = jwt.verify(token, jwtKey) as DecodedWebToken
+    return decodedWebToken
+  } catch (err) {
+    console.error(err)
     return null
   }
 }

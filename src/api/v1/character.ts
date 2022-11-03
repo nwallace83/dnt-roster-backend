@@ -1,56 +1,49 @@
 import express from 'express'
-import tokenService from '../../services/tokenService'
-import dbUserService from '../../services/dbUserService'
 import dbCharacterService from '../../services/dbCharacterService'
-import Character from '../../types/character_type'
-import User from '../../types/user_type'
+import authorizedMiddleWare, { RequestWithUser } from '../../middlware/authenticatedMiddleware'
+import Character, { getNewCharacter } from '../../types/character_type'
 
-const character = express.Router()
+const router = express.Router()
+router.use(authorizedMiddleWare)
 
-character.get('/', (req, res) => {
-  if (req.cookies.authorization == null) {
-    return res.status(401).send('No authorization token provided')
-  }
-
-  authenticateAndGetUserFromDB(req.cookies.authorization).then(user => {
-    if (user == null) {
-      res.status(401).send('Unable to find user in database')
-    } else {
-      dbCharacterService.findCharacterById(user.id).then((character: Character | null) => {
-        res.json(character)
-      }).catch(err => console.error(err))
-    }
+router.get('/', (req: RequestWithUser, res) => {
+  dbCharacterService.findCharacterById(req.user.id).then((character: Character) => {
+    res.json(character)
   }).catch(err => console.error(err))
 })
 
-character.post('/', (req, res) => {
-  let character: Character
-  if (req.cookies.authorization == null) {
-    return res.status(401).send('No authorization token provided')
-  } else {
-    character = req.body
-    authenticateAndGetUserFromDB(req.cookies.authorization).then((user: User | null) => {
-      if (user == null) {
-        res.status(401).send('Unable to find user in database')
-      } else {
-        character.discordUserName = user.user_name
-        character.id = user.id
-        dbCharacterService.updateCharacterById(user.id, character).then(() => {
-          res.sendStatus(200)
-        }).catch(err => console.error(err))
-      }
-    }).catch(err => console.error(err))
-  }
+router.post('/', (req: RequestWithUser, res) => {
+  const sanitizedCharacter: Character = sanitizeCharacter(req.body, req.user.id)
+  dbCharacterService.updateCharacter(sanitizedCharacter).then(() => {
+    res.sendStatus(200)
+  }).catch(err => console.error(err))
 })
 
-async function authenticateAndGetUserFromDB (authorization: string) {
-  const decodedWebToken = tokenService.decodeWebToken(authorization)
-  if (decodedWebToken == null) {
-    return await Promise.reject(new Error('Unable to decode secret: ' + authorization))
-  } else {
-    const user = await dbUserService.getUserById(decodedWebToken.id)
-    return await Promise.resolve(user)
-  }
+function sanitizeCharacter (requestBody: any, userId: string) {
+  const sanitizedCharacter: Character = getNewCharacter()
+
+  sanitizedCharacter.id = userId
+  sanitizedCharacter.characterName = requestBody.characterName ?? ''
+  sanitizedCharacter.primaryWeapon1 = requestBody.primaryWeapon1 ?? ''
+  sanitizedCharacter.primaryWeapon2 = requestBody.primaryWeapon2 ?? ''
+  sanitizedCharacter.primaryRole = requestBody.primaryRole ?? ''
+  sanitizedCharacter.primaryArmor = requestBody.primaryArmor ?? ''
+  sanitizedCharacter.primaryGS = requestBody.PrimaryGS ?? 0
+  sanitizedCharacter.secondaryWeapon1 = requestBody.secondaryWeapon1 ?? ''
+  sanitizedCharacter.secondaryWeapon2 = requestBody.secondaryWeapon2 ?? ''
+  sanitizedCharacter.secondaryRole = requestBody.secondaryRole ?? ''
+  sanitizedCharacter.secondaryArmor = requestBody.secondaryArmor ?? ''
+  sanitizedCharacter.secondaryGS = requestBody.secondaryGS ?? 0
+  sanitizedCharacter.discordUserName = requestBody.discordUserName ?? ''
+  sanitizedCharacter.inactive = requestBody.inactive ?? false
+  sanitizedCharacter.crafting.weaponSmithing = requestBody.weaponSmithing ?? false
+  sanitizedCharacter.crafting.armoring = requestBody.armoring ?? false
+  sanitizedCharacter.crafting.engineering = requestBody.engineering ?? false
+  sanitizedCharacter.crafting.jewelCrafting = requestBody.jewelCrafting ?? false
+  sanitizedCharacter.crafting.arcana = requestBody.arcana ?? false
+  sanitizedCharacter.crafting.cooking = requestBody.cooking ?? false
+  sanitizedCharacter.crafting.furnishing = requestBody.furnishing ?? false
+  return sanitizedCharacter
 }
 
-export default character
+export default router

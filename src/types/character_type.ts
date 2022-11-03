@@ -23,3 +23,32 @@ export default interface Character {
     furnishing: boolean
   }
 }
+
+export function getNewCharacter () {
+  const newCharacter: Character = {
+    id: '',
+    characterName: '',
+    primaryWeapon1: '',
+    primaryWeapon2: '',
+    primaryRole: '',
+    primaryArmor: '',
+    primaryGS: 0,
+    secondaryWeapon1: '',
+    secondaryWeapon2: '',
+    secondaryRole: '',
+    secondaryArmor: '',
+    secondaryGS: 0,
+    discordUserName: '',
+    inactive: false,
+    crafting: {
+      weaponSmithing: false,
+      armoring: false,
+      engineering: false,
+      jewelCrafting: false,
+      arcana: false,
+      cooking: false,
+      furnishing: false
+    }
+  }
+  return newCharacter
+}

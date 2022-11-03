@@ -1,9 +1,9 @@
 import express from 'express'
 import Character from '../../types/character_type'
 import dbUserService from '../../services/dbCharacterService'
-const roster = express.Router()
+const router = express.Router()
 
-roster.get('/', (req, res) => {
+router.get('/', (req, res) => {
   dbUserService.findCharacters().then((characters: Character[]) => {
     res.json(characters)
   }).catch((err: any) => {
@@ -12,4 +12,4 @@ roster.get('/', (req, res) => {
   })
 })
 
-export default roster
+export default router
