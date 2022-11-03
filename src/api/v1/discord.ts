@@ -21,9 +21,9 @@ router.post('/login/:code', (req, res) => {
         const token = tokenService.getJWTTokenForDiscordUser(discordUser)
         const response = { token }
         res.json(response)
-      }).catch(err => console.error(err))
-    }).catch(err => console.error(err))
-  }).catch(err => console.error(err))
+      }).catch(err => console.warn(err))
+    }).catch(err => console.warn(err))
+  }).catch(err => console.warn(err))
 })
 
 async function assembleTokenUserFromCode (code: string) {

@@ -15,7 +15,7 @@ async function updateCharacter (character: Character) {
     const result = await CharacterModelDB.updateOne({ id: character.id }, character, { upsert: true, runValidators: true })
     return result
   } catch (err) {
-    console.error(err)
+    console.warn(err)
     return await Promise.reject(new Error('Unable to update character: ' + character.characterName))
   }
 }

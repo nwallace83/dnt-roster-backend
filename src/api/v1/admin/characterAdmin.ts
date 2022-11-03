@@ -18,10 +18,10 @@ router.post('/inactive/:characterid/:status', (req, res) => {
       dbCharacterService.updateCharacter(character).then(() => {
         dbCharacterService.findCharacterById(character.id).then(character => {
           res.json(character)
-        }).catch(err => console.error(err))
-      }).catch(err => console.error(err))
+        }).catch(err => console.warn(err))
+      }).catch(err => console.warn(err))
     }
-  }).catch(err => console.error(err))
+  }).catch(err => console.warn(err))
 })
 
 export default router

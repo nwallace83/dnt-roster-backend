@@ -14,7 +14,7 @@ export default function authenticatedMiddleware (req: RequestWithUser, res: expr
     dbUserService.getUserById(decodedWebToken.id).then(user => {
       req.user = user
       next()
-    }).catch(err => console.error(err))
+    }).catch(err => console.warn(err))
   }
 }
 

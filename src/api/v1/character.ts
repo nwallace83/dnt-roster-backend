@@ -9,14 +9,14 @@ router.use(authorizedMiddleWare)
 router.get('/', (req: RequestWithUser, res) => {
   dbCharacterService.findCharacterById(req.user.id).then((character: Character) => {
     res.json(character)
-  }).catch(err => console.error(err))
+  }).catch(err => console.warn(err))
 })
 
 router.post('/', (req: RequestWithUser, res) => {
   const sanitizedCharacter: Character = sanitizeCharacter(req.body, req.user.id)
   dbCharacterService.updateCharacter(sanitizedCharacter).then(() => {
     res.sendStatus(200)
-  }).catch(err => console.error(err))
+  }).catch(err => console.warn(err))
 })
 
 function sanitizeCharacter (requestBody: any, userId: string) {
@@ -36,13 +36,13 @@ function sanitizeCharacter (requestBody: any, userId: string) {
   sanitizedCharacter.secondaryGS = requestBody.secondaryGS ?? 0
   sanitizedCharacter.discordUserName = requestBody.discordUserName ?? ''
   sanitizedCharacter.inactive = requestBody.inactive ?? false
-  sanitizedCharacter.crafting.weaponSmithing = requestBody.weaponSmithing ?? false
-  sanitizedCharacter.crafting.armoring = requestBody.armoring ?? false
-  sanitizedCharacter.crafting.engineering = requestBody.engineering ?? false
-  sanitizedCharacter.crafting.jewelCrafting = requestBody.jewelCrafting ?? false
-  sanitizedCharacter.crafting.arcana = requestBody.arcana ?? false
-  sanitizedCharacter.crafting.cooking = requestBody.cooking ?? false
-  sanitizedCharacter.crafting.furnishing = requestBody.furnishing ?? false
+  sanitizedCharacter.crafting.weaponSmithing = requestBody.crafting.weaponSmithing ?? false
+  sanitizedCharacter.crafting.armoring = requestBody.crafting.armoring ?? false
+  sanitizedCharacter.crafting.engineering = requestBody.crafting.engineering ?? false
+  sanitizedCharacter.crafting.jewelCrafting = requestBody.crafting.jewelCrafting ?? false
+  sanitizedCharacter.crafting.arcana = requestBody.crafting.arcana ?? false
+  sanitizedCharacter.crafting.cooking = requestBody.crafting.cooking ?? false
+  sanitizedCharacter.crafting.furnishing = requestBody.crafting.furnishing ?? false
   return sanitizedCharacter
 }
 
