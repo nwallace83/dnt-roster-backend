@@ -27,9 +27,9 @@ fi
 if [ $? -eq 0 ] 
 then
     echo "REMOVING FILES"
-    rm -Rfv $BASEDIR/src/html/*
+    rm -Rfv $BASEDIR/dist/html/*
     echo "COPYING FILES"
-    cp -Rfv $PROJECTDIR/build/* $BASEDIR/src/html/
+    cp -Rfv $PROJECTDIR/build/* $BASEDIR/dist/html/
 else 
     echo "Package build failed"
 fi

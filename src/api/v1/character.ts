@@ -16,12 +16,11 @@ router.get('/', (req: RequestWithUser, res) => {
 router.post('/', (req: RequestWithUser, res) => {
   const sanitizedCharacter: Character = sanitizeCharacter(req.body, req.user)
   dbCharacterService.updateCharacter(sanitizedCharacter).then(() => {
-    res.sendStatus(200)
+    res.json(sanitizeCharacter(sanitizedCharacter, req.user))
   }).catch(err => console.warn(err))
 })
 
 function sanitizeCharacter (requestBody: any, user: User) {
-  console.info(user)
   const sanitizedCharacter: Character = getNewCharacter()
 
   sanitizedCharacter.id = user.id
@@ -45,6 +44,7 @@ function sanitizeCharacter (requestBody: any, user: User) {
   sanitizedCharacter.crafting.arcana = requestBody.crafting.arcana ?? false
   sanitizedCharacter.crafting.cooking = requestBody.crafting.cooking ?? false
   sanitizedCharacter.crafting.furnishing = requestBody.crafting.furnishing ?? false
+
   return sanitizedCharacter
 }
 

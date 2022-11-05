@@ -11,8 +11,7 @@ function decodeWebToken (token: string) {
   try {
     const decodedWebToken = jwt.verify(token, jwtKey) as DecodedWebToken
     return decodedWebToken
-  } catch (err) {
-    console.warn(err)
+  } catch {
     return null
   }
 }
