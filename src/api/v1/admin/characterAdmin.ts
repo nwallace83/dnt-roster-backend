@@ -1,8 +1,8 @@
 import express from 'express'
-import adminMiddleware from '../../../middlware/adminMiddleware'
-import authenticatedMiddleware from '../../../middlware/authenticatedMiddleware'
-import dbCharacterService from '../../../services/dbCharacterService'
-import Character from '../../../types/character_type'
+import adminMiddleware from '../../../middlware/admin-middleware'
+import authenticatedMiddleware from '../../../middlware/authenticated-middleware'
+import dbCharacterService from '../../../services/db-character-service'
+import Character from '../../../types/character-type'
 
 const router = express.Router()
 

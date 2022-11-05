@@ -1,9 +1,9 @@
 import express from 'express'
 import fetch from 'node-fetch'
-import dbUserService from '../../services/dbUserService'
-import tokenService from '../../services/tokenService'
+import dbUserService from '../../services/db-user-service'
+import tokenService from '../../services/token-service'
 import { URLSearchParams } from 'url'
-import DiscordUser, { DiscordUserToken } from '../../types/discord_user_type'
+import DiscordUser, { DiscordUserToken } from '../../types/discord-user-type'
 
 const router = express.Router()
 const API_ENDPOINT = 'https://discord.com/api'

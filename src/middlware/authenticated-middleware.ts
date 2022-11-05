@@ -1,7 +1,7 @@
-import tokenService from '../services/tokenService'
-import dbUserService from '../services/dbUserService'
+import tokenService from '../services/token-service'
+import dbUserService from '../services/db-user-service'
 import express from 'express'
-import User from '../types/user_type'
+import User from '../types/user-type'
 
 export default function authenticatedMiddleware (req: RequestWithUser, res: express.Response, next: express.NextFunction) {
   if (req.cookies.authorization == null) {

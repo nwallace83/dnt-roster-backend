@@ -1,6 +1,6 @@
-import UserModelDB from '../models/userModelDB'
-import DiscordUser from '../types/discord_user_type'
-import User, { getNewUser } from '../types/user_type'
+import UserModelDB from '../models/user-model-db'
+import DiscordUser from '../types/discord-user-type'
+import User, { getNewUser } from '../types/user-type'
 
 async function getUserById (userid: string) {
   const fetchedUser = await UserModelDB.findOne({ id: userid }, { _id: 0, __v: 0 })

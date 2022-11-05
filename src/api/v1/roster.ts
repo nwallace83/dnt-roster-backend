@@ -1,6 +1,6 @@
 import express from 'express'
-import Character from '../../types/character_type'
-import dbUserService from '../../services/dbCharacterService'
+import Character from '../../types/character-type'
+import dbUserService from '../../services/db-character-service'
 const router = express.Router()
 
 router.get('/', (req, res) => {

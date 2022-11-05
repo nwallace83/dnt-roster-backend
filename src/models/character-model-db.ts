@@ -1,6 +1,6 @@
-import db from '../services/dbService'
+import db from '../services/db-service'
 import { Schema } from 'mongoose'
-import Character from '../types/character_type'
+import Character from '../types/character-type'
 
 const characterSchema = new Schema<Character>({
   id: { type: String, required: true },

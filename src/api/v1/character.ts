@@ -1,8 +1,8 @@
 import express from 'express'
-import dbCharacterService from '../../services/dbCharacterService'
-import authorizedMiddleWare, { RequestWithUser } from '../../middlware/authenticatedMiddleware'
-import Character, { getNewCharacter } from '../../types/character_type'
-import User from '../../types/user_type'
+import dbCharacterService from '../../services/db-character-service'
+import authorizedMiddleWare, { RequestWithUser } from '../../middlware/authenticated-middleware'
+import Character, { getNewCharacter } from '../../types/character-type'
+import User from '../../types/user-type'
 
 const router = express.Router()
 router.use(authorizedMiddleWare)

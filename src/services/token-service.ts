@@ -1,7 +1,7 @@
 import jwt, { Secret } from 'jsonwebtoken'
-import DiscordUser from '../types/discord_user_type'
-import User from '../types/user_type'
-import DecodedWebToken from '../types/decoded_web_token_type'
+import DiscordUser from '../types/discord-user-type'
+import User from '../types/user-type'
+import DecodedWebToken from '../types/decoded-web-token-type'
 
 const jwtKey: Secret = process.env.JWT_KEY as Secret
 

@@ -1,7 +1,7 @@
 
 import express from 'express'
-import tokenService from '../../services/tokenService'
-import authenticatedMiddleware, { RequestWithUser } from '../../middlware/authenticatedMiddleware'
+import tokenService from '../../services/token-service'
+import authenticatedMiddleware, { RequestWithUser } from '../../middlware/authenticated-middleware'
 
 const router = express.Router()
 router.use(authenticatedMiddleware)

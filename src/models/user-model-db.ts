@@ -1,6 +1,6 @@
-import db from '../services/dbService'
+import db from '../services/db-service'
 import { Schema } from 'mongoose'
-import User from '../types/user_type'
+import User from '../types/user-type'
 
 const userSchema = new Schema<User>({
   id: { type: String, required: true },

@@ -1,5 +1,5 @@
-import CharacterModelDB from '../models/characterModelDB'
-import Character, { getNewCharacter } from '../types/character_type'
+import CharacterModelDB from '../models/character-model-db'
+import Character, { getNewCharacter } from '../types/character-type'
 
 async function findCharacterById (characerID: string) {
   const character = await CharacterModelDB.findOne({ id: characerID }, { _id: 0, __v: 0 })
