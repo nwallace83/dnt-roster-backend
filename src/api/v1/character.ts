@@ -15,7 +15,7 @@ router.get('/', (req: RequestWithUser, res) => {
 
 router.post('/', (req: RequestWithUser, res) => {
   const sanitizedCharacter: Character = sanitizeCharacter(req.body, req.user)
-  dbCharacterService.updateCharacter(sanitizedCharacter).then(() => {
+  dbCharacterService.saveCharacter(sanitizedCharacter).then(() => {
     res.json(sanitizeCharacter(sanitizedCharacter, req.user))
   }).catch(err => console.warn(err))
 })

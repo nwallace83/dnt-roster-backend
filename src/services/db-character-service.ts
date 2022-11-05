@@ -10,9 +10,20 @@ async function findCharacterById (characerID: string) {
   }
 }
 
-async function updateCharacter (character: Character) {
+async function saveCharacter (character: Character) {
   try {
     const result = await CharacterModelDB.updateOne({ id: character.id }, character, { upsert: true, runValidators: true })
+    return result
+  } catch (err) {
+    console.warn(err)
+    return await Promise.reject(new Error('Unable to update character: ' + character.characterName))
+  }
+}
+
+async function updateCharacter (character: Character) {
+  try {
+    const result = await CharacterModelDB.updateOne({ id: character.id }, character, { runValidators: true })
+    console.info(result)
     return result
   } catch (err) {
     console.warn(err)
@@ -24,5 +35,5 @@ function findCharacters () {
   return CharacterModelDB.find()
 }
 
-const dbCharacterService = { findCharacterById, updateCharacter, findCharacters }
+const dbCharacterService = { findCharacterById, updateCharacter, findCharacters, saveCharacter }
 export default dbCharacterService
