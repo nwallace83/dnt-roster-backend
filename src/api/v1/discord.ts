@@ -12,15 +12,14 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET ?? ''
 const REDIRECT_URI = process.env.REDIRECT_URI ?? ''
 
 router.post('/login/:code', (req, res) => {
-  let discordUser: DiscordUser
-
   assembleTokenUserFromCode(req.params.code).then((discordtoken: any) => {
-    assembleUserFromUserToken(discordtoken).then(user => {
-      discordUser = user
-      dbUserService.saveDiscordUserToDatabase(user).then(() => {
-        const token = tokenService.getJWTTokenForDiscordUser(discordUser)
-        const response = { token }
-        res.json(response)
+    assembleUserFromUserToken(discordtoken).then(discUser => {
+      dbUserService.saveDiscordUserToDatabase(discUser).then((user) => {
+        if (user != null) {
+          const token = tokenService.getJWTTokenForUser(user)
+          const response = { token }
+          res.json(response)
+        }
       }).catch(err => console.warn(err))
     }).catch(err => console.warn(err))
   }).catch(err => console.warn(err))

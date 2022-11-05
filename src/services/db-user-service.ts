@@ -16,7 +16,8 @@ async function saveDiscordUserToDatabase (discordUser: DiscordUser) {
 
   if (userInDatabase != null) {
     userInDatabase.last_login = Date.now()
-    return await UserModelDB.updateOne({ id: discordUser.id }, userInDatabase, { upsert: true })
+    await UserModelDB.updateOne({ id: discordUser.id }, userInDatabase, { upsert: true })
+    return userInDatabase
   } else {
     const newUser = getNewUser()
     newUser.id = discordUser.id
@@ -27,7 +28,11 @@ async function saveDiscordUserToDatabase (discordUser: DiscordUser) {
     newUser.token.access_token = discordUser.token.access_token
     newUser.token.expires_at = (discordUser.token.expires_in * 1000) + Date.now()
     newUser.token.refresh_token = discordUser.token.refresh_token
-    return await UserModelDB.updateOne({ id: discordUser.id }, newUser, { upsert: true })
+    await UserModelDB.updateOne({ id: discordUser.id }, newUser, { upsert: true })
+    const newUserinDB = UserModelDB.findOne({ id: discordUser.id }, { _id: 0, __v: 0 })
+    if (newUserinDB != null) {
+      return await Promise.resolve(newUserinDB)
+    } 
   }
 }
 
