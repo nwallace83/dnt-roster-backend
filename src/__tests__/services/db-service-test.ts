@@ -1,0 +1,61 @@
+import { Schema } from 'mongoose'
+
+describe('dbService', () => {
+  const origEnv = { ...process.env }
+  const testSchema = new Schema({ test: { type: String } })
+
+  const mockConnect = jest.fn(async (value) => await Promise.resolve(value))
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const mockDB = jest.mock('mongoose', () => ({
+    ...jest.requireActual('mongoose'),
+    connect: mockConnect
+  }))
+
+  afterEach(() => {
+    process.env = origEnv
+    jest.clearAllMocks()
+  })
+
+  it('Calls the correct production database', async () => {
+    process.env.NODE_ENV = 'production'
+    let db
+    let testModel
+
+    jest.isolateModules(() => {
+      db = require('../../services/db-service')
+      testModel = db.default.model('test', testSchema)
+      testModel.updateOne({ test: 'test' })
+    })
+
+    expect(mockConnect.mock.calls[0][0]).toEqual('mongodb://mongo:27017/dntroster')
+  })
+
+  it('Calls the correct staging database', async () => {
+    process.env.NODE_ENV = 'staging'
+    let db
+    let testModel
+
+    jest.isolateModules(() => {
+      db = require('../../services/db-service')
+      testModel = db.default.model('test', testSchema)
+      testModel.updateOne({ test: 'test' })
+    })
+
+    expect(mockConnect.mock.calls[0][0]).toEqual('mongodb://mongo:27017/dntroster')
+  })
+
+  it('Calls the local database if NODE_ENV not set', async () => {
+    process.env.NODE_ENV = ''
+    let db
+    let testModel
+
+    jest.isolateModules(() => {
+      db = require('../../services/db-service')
+      testModel = db.default.model('test', testSchema)
+      testModel.updateOne({ test: 'test' })
+    })
+
+    expect(mockConnect.mock.calls[0][0]).toEqual('mongodb://localhost:27017/dntroster')
+  })
+})

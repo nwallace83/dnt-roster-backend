@@ -3,8 +3,8 @@ export default interface User {
   user_name: string
   is_admin: boolean
   avatar: string
-  last_login: number
-  token: UserToken
+  last_login?: number
+  token?: UserToken
 }
 
 export interface UserToken {

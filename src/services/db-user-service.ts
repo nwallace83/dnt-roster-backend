@@ -25,14 +25,16 @@ async function saveDiscordUserToDatabase (discordUser: DiscordUser) {
     newUser.is_admin = false
     newUser.user_name = discordUser.username + '#' + discordUser.discriminator
     newUser.last_login = Date.now()
-    newUser.token.access_token = discordUser.token.access_token
-    newUser.token.expires_at = (discordUser.token.expires_in * 1000) + Date.now()
-    newUser.token.refresh_token = discordUser.token.refresh_token
+    if (newUser.token != null) {
+      newUser.token.access_token = discordUser.token.access_token
+      newUser.token.expires_at = (discordUser.token.expires_in * 1000) + Date.now()
+      newUser.token.refresh_token = discordUser.token.refresh_token
+    }
     await UserModelDB.updateOne({ id: discordUser.id }, newUser, { upsert: true })
     const newUserinDB = UserModelDB.findOne({ id: discordUser.id }, { _id: 0, __v: 0 })
     if (newUserinDB != null) {
       return await Promise.resolve(newUserinDB)
-    } 
+    }
   }
 }
 

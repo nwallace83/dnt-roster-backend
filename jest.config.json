@@ -1,0 +1,6 @@
+{
+  "verbose": true,
+  "automock": false,
+  "setupFiles": ["<rootDir>/jest.setup.js"],
+  "testMatch": ["<rootDir>/dist/__tests__/**/*"]
+}

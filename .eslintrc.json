@@ -10,7 +10,7 @@
         "sourceType": "module",
         "project": "./tsconfig.json"
     },
-    "ignorePatterns": ["**/html", "dist/**"],
+    "ignorePatterns": ["dist/**"],
     "rules": {
         "semi": [
             "error",
