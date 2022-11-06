@@ -12,7 +12,7 @@
     "node-fetch": "^2.6.7"
   },
   "scripts": {
-    "test": "jest --config ./jest.config.json --watchAll",
+    "test": "jest --config ./jest.config.json --watch --detectOpenHandles --maxWorkers=75%",
     "tsc:watch": "tsc --watch"
   },
   "devDependencies": {

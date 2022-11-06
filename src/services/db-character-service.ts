@@ -23,7 +23,6 @@ async function saveCharacter (character: Character) {
 async function updateCharacter (character: Character) {
   try {
     const result = await CharacterModelDB.updateOne({ id: character.id }, character, { runValidators: true })
-    console.info(result)
     return result
   } catch (err) {
     console.warn(err)

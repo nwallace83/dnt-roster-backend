@@ -45,6 +45,21 @@ describe('dbService', () => {
     expect(mockConnect.mock.calls[0][0]).toEqual('mongodb://mongo:27017/dntroster')
   })
 
+  it('Calls the correct test database', async () => {
+    process.env.NODE_ENV = 'test'
+    process.env.JEST_WORKER_ID = 'FAKE'
+    let db
+    let testModel
+
+    jest.isolateModules(() => {
+      db = require('../../services/db-service')
+      testModel = db.default.model('test', testSchema)
+      testModel.updateOne({ test: 'test' })
+    })
+
+    expect(mockConnect.mock.calls[0][0]).toEqual('mongodb://localhost:27018/dntrosterFAKE')
+  })
+
   it('Calls the local database if NODE_ENV not set', async () => {
     process.env.NODE_ENV = ''
     let db

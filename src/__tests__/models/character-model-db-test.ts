@@ -5,7 +5,7 @@ describe('CharacterModelDB', () => {
 
   beforeEach(() => {
     testCharacter = {
-      id: undefined,
+      id: '',
       characterName: '',
       primaryWeapon1: '',
       primaryWeapon2: '',
@@ -32,8 +32,8 @@ describe('CharacterModelDB', () => {
   })
 
   it('Fails validation if id field is missing', async () => {
-    const result: any = await CharacterModelDB.validate(testCharacter)
-
-    expect(result).toEqual('bacon')
+    expect.assertions(1)
+    testCharacter.id = undefined
+    return await expect(CharacterModelDB.validate(testCharacter)).rejects.toThrowError('Validation failed: id: Path `id` is required.')
   })
 })
