@@ -1,6 +1,6 @@
 import express from 'express'
-import adminMiddleware from '../../../middlware/admin-middleware'
-import authenticatedMiddleware from '../../../middlware/authenticated-middleware'
+import adminMiddleware from '../../../middleware/admin-middleware'
+import authenticatedMiddleware from '../../../middleware/authenticated-middleware'
 import dbCharacterService from '../../../services/db-character-service'
 import Character from '../../../types/character-type'
 

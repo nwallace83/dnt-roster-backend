@@ -1,7 +1,6 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
-
 import discord from './api/v1/discord'
 import auth from './api/v1/auth'
 import character from './api/v1/character'
@@ -9,7 +8,6 @@ import roster from './api/v1/roster'
 import characterAdmin from './api/v1/admin/characterAdmin'
 
 const app = express()
-
 app.use(cookieParser())
 app.use(bodyParser.json())
 

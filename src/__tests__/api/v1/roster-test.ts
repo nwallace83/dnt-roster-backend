@@ -16,9 +16,11 @@ jest.doMock('../../../services/db-character-service', () => {
 import app from '../../../app'
 
 describe('roster', () => {
+  const endPoint = '/api/v1/roster'
+
   test('GET /roster returns roster', async () => {
     expect.assertions(1)
-    return supertest(app).get('/api/v1/roster').expect(200).then(response => {
+    return await supertest(app).get(endPoint).expect(200).then(response => {
       expect(response.body).toEqual(mockTestCharacters)
     })
   })
@@ -26,7 +28,7 @@ describe('roster', () => {
   test('GET /roster returns 401 if unable to retrieve characters', async () => {
     mockFindCharacter = jest.fn().mockRejectedValue('')
     expect.assertions(1)
-    return supertest(app).get('/api/v1/roster').expect(401).then(response => {
+    return await supertest(app).get(endPoint).expect(401).then(response => {
       expect(response.text).toEqual('Unable to retrieve characters')
     })
   })
