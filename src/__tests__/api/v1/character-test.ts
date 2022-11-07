@@ -24,14 +24,14 @@ app.use('/api/v1/character', character)
 describe('character', () => {
   const endPoint = '/api/v1/character'
 
-  test('GET /api/v1/character requires authentication', async () => {
+  test('GET / requires authentication', async () => {
     expect.assertions(1)
     return await supertest(app).get(endPoint).expect(200).then(() => {
       expect(mockAuthenticatedMiddleware.mock.calls.length).toEqual(1)
     })
   })
 
-  test('GET /api/v1/character returns character if user is authenticated', async () => {
+  test('GET / returns character if user is authenticated', async () => {
     expect.assertions(2)
     return await supertest(app).get(endPoint).expect(200).then((result) => {
       expect(result.body).toEqual(testCharacter)
@@ -39,13 +39,13 @@ describe('character', () => {
     })
   })
 
-  test('POST /api/v1/character saves character to database', async () => {
+  test('POST / saves character to database', async () => {
     return await supertest(app).post(endPoint).send(testCharacter).expect(200).then(() => {
       expect(JSON.stringify(mockSaveCharacter.mock.calls[0][0])).toContain('testCharacter')
     })
   })
 
-  test('POST /api/v1/character sanitizes character before returning', async () => {
+  test('POST / sanitizes character before returning', async () => {
     const sanitizedCharacter = {
       id: 'testid',
       characterName: 'testCharacter',

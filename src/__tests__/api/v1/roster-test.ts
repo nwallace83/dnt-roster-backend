@@ -18,14 +18,14 @@ import app from '../../../app'
 describe('roster', () => {
   const endPoint = '/api/v1/roster'
 
-  test('GET /roster returns roster', async () => {
+  test('GET / roster returns roster', async () => {
     expect.assertions(1)
     return await supertest(app).get(endPoint).expect(200).then(response => {
       expect(response.body).toEqual(mockTestCharacters)
     })
   })
 
-  test('GET /roster returns 401 if unable to retrieve characters', async () => {
+  test('GET / roster returns 401 if unable to retrieve characters', async () => {
     mockFindCharacter = jest.fn().mockRejectedValue('')
     expect.assertions(1)
     return await supertest(app).get(endPoint).expect(401).then(response => {
