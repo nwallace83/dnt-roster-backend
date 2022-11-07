@@ -16,7 +16,7 @@ router.post('/inactive/:characterid/:status', (req, res) => {
       character = result
       character.inactive = req.params.status === 'true'
       dbCharacterService.updateCharacter(character).then(() => {
-        dbCharacterService.findCharacterById(character.id).then(character => {
+        dbCharacterService.findCharacterById(req.params.characterid).then(character => {
           res.json(character)
         }).catch(err => console.warn(err))
       }).catch(err => console.warn(err))

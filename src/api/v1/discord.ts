@@ -40,11 +40,11 @@ async function assembleTokenUserFromCode (code: string) {
   }
 
   const apiResponse = await fetch(API_ENDPOINT + '/oauth2/token', data)
-  if (apiResponse.ok == null) {
-    return await Promise.reject(new Error('Unable to get token from code: ' + code))
-  } else {
+  if (apiResponse.ok != null) {
     const token: DiscordUserToken = await apiResponse.json()
     return await Promise.resolve(token)
+  } else {
+    return await Promise.reject(new Error('Unable to get token from code: ' + code))
   }
 }
 
