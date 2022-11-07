@@ -1,11 +1,11 @@
 import express from 'express'
 import dbCharacterService from '../../services/db-character-service'
-import authorizedMiddleWare, { RequestWithUser } from '../../middlware/authenticated-middleware'
+import authenticatedMiddleware, { RequestWithUser } from '../../middlware/authenticated-middleware'
 import Character, { getNewCharacter } from '../../types/character-type'
 import User from '../../types/user-type'
 
 const router = express.Router()
-router.use(authorizedMiddleWare)
+router.use(authenticatedMiddleware)
 
 router.get('/', (req: RequestWithUser, res) => {
   dbCharacterService.findCharacterById(req.user.id).then((character: Character) => {

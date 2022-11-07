@@ -4,6 +4,19 @@ import helmet from 'helmet'
 import http from 'http'
 import https from 'https'
 import * as fs from 'fs'
+import path from 'path'
+
+const clientSecret = process.env.CLIENT_SECRET
+const JWTKey = process.env.JWT_KEY
+if (clientSecret == null || JWTKey == null) {
+  console.error('Missing environmental variable verify they exist: ')
+  clientSecret != null ? console.info('CLIENT_SECRET: Found') : console.info('CLIENT_SECRET: missing')
+  JWTKey != null ? console.info('JWT_KEY: Found') : console.info('JWT_KEY: missing')
+  console.error('CLIENT_SECRET, JWT_KEY')
+  process.exit(1)
+}
+
+app.use('/', express.static(path.join(__dirname, 'html')))
 
 if (process.env.NODE_ENV === 'production') {
   app.use(helmet({ crossOriginEmbedderPolicy: false }))
