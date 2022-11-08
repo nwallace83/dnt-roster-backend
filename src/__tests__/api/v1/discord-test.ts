@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
-/* eslint-disable import/first */
 import supertest from 'supertest'
 import app from '../../../app'
 

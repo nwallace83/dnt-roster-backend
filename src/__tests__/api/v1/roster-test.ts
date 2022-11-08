@@ -1,4 +1,3 @@
-/* eslint-disable import/first */
 import supertest from 'supertest'
 import app from '../../../app'
 
