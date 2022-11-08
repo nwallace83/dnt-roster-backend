@@ -15,7 +15,7 @@ export default function authenticatedMiddleware (req: RequestWithUser, res: expr
       req.user = user
       res.cookie('authorization', tokenService.getJWTTokenForUser(user))
       next()
-    }).catch(() => res.status(401).send('Valid token but no user in database: ' + req?.user?.user_name))
+    }).catch(() => res.status(401).send('Valid token but no user in database: ' + decodedWebToken.userName))
   }
 }
 
