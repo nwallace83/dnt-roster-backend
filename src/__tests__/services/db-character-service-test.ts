@@ -37,6 +37,10 @@ describe('dbCharacterService', () => {
     await db.connection.db.dropDatabase()
   })
 
+  afterAll(async () => {
+    await db.connection.close()
+  })
+
   describe('findCharacterById', () => {
     beforeEach(async () => {
       return await CharacterModelDB.updateOne({ id: 'testid' }, { ...testCharacter, crafting: { ...testCharacter.crafting } }, { upsert: true, runValidators: true })

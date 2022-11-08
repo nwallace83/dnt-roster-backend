@@ -4,10 +4,8 @@ describe('dbService', () => {
   const origEnv = { ...process.env }
   const testSchema = new Schema({ test: { type: String } })
 
-  const mockConnect = jest.fn(async (value) => await Promise.resolve(value))
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const mockDB = jest.mock('mongoose', () => ({
+  const mockConnect = jest.fn().mockImplementation(async () => await Promise.resolve('MOCK-DB-CONNECT'))
+  jest.doMock('mongoose', () => ({
     ...jest.requireActual('mongoose'),
     connect: mockConnect
   }))

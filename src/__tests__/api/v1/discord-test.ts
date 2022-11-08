@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/promise-function-async */
 /* eslint-disable import/first */
 import supertest from 'supertest'
+import app from '../../../app'
 
 const mockFetch = jest.fn().mockImplementation((input, data) => {
   switch (input) {
@@ -39,10 +40,11 @@ jest.doMock('../../../services/token-service', () => ({
   getJWTTokenForUser: mockGetJWTTokenForUser
 }))
 
-import app from '../../../app'
+const discord = require('../../../api/v1/discord').default
+app.use(discord)
 
 describe('discord', () => {
-  const endPoint = '/api/v1/discord/login/testcode'
+  const endPoint = '/login/testcode'
 
   afterEach(() => {
     jest.clearAllMocks()

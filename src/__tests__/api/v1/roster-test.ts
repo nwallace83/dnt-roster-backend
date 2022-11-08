@@ -1,5 +1,6 @@
 /* eslint-disable import/first */
 import supertest from 'supertest'
+import app from '../../../app'
 
 const mockTestCharacters = [
   { id: 'test1' },
@@ -13,14 +14,13 @@ jest.doMock('../../../services/db-character-service', () => {
   }
 })
 
-import app from '../../../app'
+const roster = require('../../../api/v1/roster').default
+app.use(roster)
 
 describe('roster', () => {
-  const endPoint = '/api/v1/roster'
-
   test('GET / roster returns roster', async () => {
     expect.assertions(1)
-    return await supertest(app).get(endPoint).expect(200).then(response => {
+    return await supertest(app).get('/').expect(200).then(response => {
       expect(response.body).toEqual(mockTestCharacters)
     })
   })
@@ -28,7 +28,7 @@ describe('roster', () => {
   test('GET / roster returns 401 if unable to retrieve characters', async () => {
     mockFindCharacter = jest.fn().mockRejectedValue('')
     expect.assertions(1)
-    return await supertest(app).get(endPoint).expect(401).then(response => {
+    return await supertest(app).get('/').expect(401).then(response => {
       expect(response.text).toEqual('Unable to retrieve characters')
     })
   })

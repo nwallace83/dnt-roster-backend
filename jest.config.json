@@ -3,5 +3,5 @@
   "automock": false,
   "testEnvironment": "node",
   "setupFiles": ["<rootDir>/jest.setup.js"],
-  "testMatch": ["<rootDir>/dist/__tests__/**/*"]
+  "testMatch": ["<rootDir>/src/__tests__/**/*"]
 }

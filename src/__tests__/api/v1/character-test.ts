@@ -1,5 +1,6 @@
 /* eslint-disable import/first */
 import supertest from 'supertest'
+import app from '../../../app'
 
 const testCharacter = { characterName: 'testCharacter' }
 const testUser = { id: 'testid' }
@@ -17,12 +18,15 @@ const mockAuthenticatedMiddleware = jest.fn((req, res, next) => {
 })
 jest.doMock('../../../middleware/authenticated-middleware', () => mockAuthenticatedMiddleware)
 
-import app from '../../../app'
-import character from '../../../api/v1/character'
-app.use('/api/v1/character', character)
+const character = require('../../../api/v1/character').default
+app.use(character)
 
 describe('character', () => {
-  const endPoint = '/api/v1/character'
+  const endPoint = '/'
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
 
   test('GET / requires authentication', async () => {
     expect.assertions(1)

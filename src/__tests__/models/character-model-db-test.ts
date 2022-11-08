@@ -1,4 +1,11 @@
-import CharacterModelDB from '../../models/character-model-db'
+
+const mockConnect = jest.fn().mockImplementation(async () => await Promise.resolve('MOCK-DB-CONNECT'))
+jest.doMock('mongoose', () => ({
+  ...jest.requireActual('mongoose'),
+  connect: mockConnect
+}))
+
+const CharacterModelDB = require('../../models/character-model-db').default
 
 describe('CharacterModelDB', () => {
   let testCharacter: any
