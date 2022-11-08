@@ -4,7 +4,7 @@ import Character, { getNewCharacter } from '../types/character-type'
 async function findCharacterById (characerID: string) {
   const character = await CharacterModelDB.findOne({ id: characerID }, { _id: 0, __v: 0 })
   if (character != null) {
-    return character
+    return character.toJSON()
   } else {
     return getNewCharacter()
   }

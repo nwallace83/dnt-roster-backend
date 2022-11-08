@@ -49,7 +49,15 @@ describe('dbCharacterService', () => {
     it('Retrieves character', async () => {
       expect.assertions(1)
       return await dbCharacterService.findCharacterById('testid').then((result: any) => {
-        expect(result.toJSON()).toEqual(testCharacter)
+        expect(result).toEqual(testCharacter)
+      })
+    })
+
+    it('Returns empty character if id does not exist', async () => {
+      expect.assertions(1)
+      const expectedCharacter = { ...testCharacter, crafting: { ...testCharacter.crafting }, id: '' }
+      return await dbCharacterService.findCharacterById('fake').then((result: any) => {
+        expect(result).toEqual(expectedCharacter)
       })
     })
   })
@@ -60,18 +68,13 @@ describe('dbCharacterService', () => {
     })
 
     test('Updates existing user', async () => {
-      await CharacterModelDB.find().then((res: any) => {
-        expect(res).toEqual(testCharacter)
-        expect(res.characterName).toEqual('bacon')
-      }).catch(e => { })
+      expect.assertions(1)
 
       await dbCharacterService.updateCharacter({ ...testCharacter, characterName: 'testName' })
 
-      await CharacterModelDB.find().then((res: any) => {
-        expect(res).toEqual({ ...testCharacter, characterName: 'testName' })
-      }).catch(e => { })
-
-      expect.assertions(2)
+      await CharacterModelDB.findOne({ id: 'testid' }, { _id: 0, __v: 0 }).then((res: any) => {
+        expect(res.toJSON()).toEqual({ ...testCharacter, characterName: 'testName' })
+      })
     })
 
     test('Does not upate if user not in db', async () => {
@@ -93,7 +96,18 @@ describe('dbCharacterService', () => {
       expect.assertions(1)
       return await dbCharacterService.findCharacters().then(res => {
         expect(res.length).toEqual(3)
-      }).catch(e => { })
+      })
+    })
+  })
+
+  describe('saveCharacter', () => {
+    test('Saves character to the database', async () => {
+      expect.assertions(2)
+      await dbCharacterService.saveCharacter({ ...testCharacter, crafting: { ...testCharacter.crafting }, id: 'SaveCharacterID' })
+      return await CharacterModelDB.find().then((result) => {
+        expect(result.length).toEqual(1)
+        expect(result[0].id).toEqual('SaveCharacterID')
+      })
     })
   })
 })
