@@ -5,7 +5,6 @@
     "express": "^4.17.3",
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
-    "jwt-decode": "^3.1.2",
     "mongoose": "^6.7.0",
     "node-fetch": "^2.6.7"
   },
