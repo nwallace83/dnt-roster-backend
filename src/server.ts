@@ -11,7 +11,7 @@ import auth from './api/v1/auth'
 import character from './api/v1/character'
 import roster from './api/v1/roster'
 import characterAdmin from './api/v1/admin/characterAdmin'
-import logout from './api/v1/logout'
+import logout from './logout'
 
 app.use('/api/v1/discord', discord)
 app.use('/api/v1/auth', auth)

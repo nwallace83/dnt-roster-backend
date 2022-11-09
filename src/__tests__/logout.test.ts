@@ -1,7 +1,7 @@
 import supertest from 'supertest'
-import app from '../../../app'
+import app from '../app'
 
-const logout = require('../../../api/v1/logout').default
+const logout = require('../logout').default
 app.use('/', logout)
 
 describe('logout', () => {
