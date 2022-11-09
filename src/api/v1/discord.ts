@@ -5,6 +5,7 @@ import tokenService from '../../services/token-service'
 import { URLSearchParams } from 'url'
 import DiscordUser, { DiscordUserToken } from '../../types/discord-user-type'
 
+const THIRTY_DAYS = 2592000000
 const router = express.Router()
 const API_ENDPOINT = 'https://discord.com/api'
 const CLIENT_ID = '944735010311786537'
@@ -16,9 +17,11 @@ router.post('/login/:code', (req, res) => {
     assembleUserFromUserToken(discordtoken).then(discUser => {
       dbUserService.saveDiscordUserToDatabase(discUser).then((user) => {
         if (user != null) {
-          const token = tokenService.getJWTTokenForUser(user)
-          const response = { token }
-          res.json(response)
+          res.cookie('authorization', tokenService.getJWTTokenForUser(user), { httpOnly: true, maxAge: THIRTY_DAYS })
+          const responseUser = { id: user.id, user_name: user.user_name, is_admin: user.is_admin, avatar: user.avatar }
+          res.json(responseUser)
+        } else {
+          res.sendStatus(401)
         }
       }).catch(err => console.warn(err))
     }).catch(err => console.warn(err))

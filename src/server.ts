@@ -11,12 +11,14 @@ import auth from './api/v1/auth'
 import character from './api/v1/character'
 import roster from './api/v1/roster'
 import characterAdmin from './api/v1/admin/characterAdmin'
+import logout from './api/v1/logout'
 
 app.use('/api/v1/discord', discord)
 app.use('/api/v1/auth', auth)
 app.use('/api/v1/character', character)
 app.use('/api/v1/roster', roster)
 app.use('/api/v1/admin/character', characterAdmin)
+app.use('/logout', logout)
 
 const clientSecret = process.env.CLIENT_SECRET
 const JWTKey = process.env.JWT_KEY

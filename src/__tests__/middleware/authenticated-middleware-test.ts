@@ -53,12 +53,13 @@ describe('authenticatedMiddlware', () => {
   })
 
   test('Returns 401 if token is invalid', async () => {
-    expect.assertions(4)
-    return await supertest(app).get('/').set('Cookie', ['authorization=BADTOKEN']).expect(401).then(() => {
+    expect.assertions(5)
+    return await supertest(app).get('/').set('Cookie', ['authorization=BADTOKEN']).expect(401).then((res) => {
       expect(mockDecodeWebToken.mock.calls.length).toEqual(1)
       expect(mockDecodeWebToken.mock.calls[0][0]).toEqual('BADTOKEN')
       expect(mockGetJWTTokenForUser.mock.calls.length).toEqual(0)
       expect(mockGetUserById.mock.calls.length).toEqual(0)
+      expect(res.header['set-cookie'][0]).toContain('authorization=;')
     })
   })
 
@@ -74,7 +75,8 @@ describe('authenticatedMiddlware', () => {
   })
 
   test('Adds user property to request and updates token', async () => {
-    expect.assertions(8)
+    jest.useFakeTimers().setSystemTime(new Date('1970-01-01'))
+    expect.assertions(10)
     return await supertest(app).get('/').set('Cookie', ['authorization=GOODTOKEN']).expect(200).then((res) => {
       expect(mockDecodeWebToken.mock.calls.length).toEqual(1)
       expect(mockDecodeWebToken.mock.calls[0][0]).toEqual('GOODTOKEN')
@@ -84,6 +86,8 @@ describe('authenticatedMiddlware', () => {
       expect(mockGetJWTTokenForUser.mock.calls[0][0]).toEqual('FAKEUSER')
       expect(mockMiddleware.mock.calls[0][0].user).toEqual('FAKEUSER')
       expect(res.header['set-cookie'][0]).toContain('authorization=NEWTOKEN')
+      expect(res.header['set-cookie'][0]).toContain('HttpOnly')
+      expect(res.header['set-cookie'][0]).toContain('Expires=Sat, 31 Jan 1970 00:00:00 GMT')
     })
   })
 })

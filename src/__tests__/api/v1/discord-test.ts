@@ -25,14 +25,14 @@ const mockFetch = jest.fn().mockImplementation((input, data) => {
 })
 jest.doMock('node-fetch', () => mockFetch)
 
-const mockSaveDiscordUserToDatabase = jest.fn().mockImplementation((user) => {
-  return Promise.resolve('FAKENEWUSER')
+const mockSaveDiscordUserToDatabase = jest.fn().mockImplementation(() => {
+  return Promise.resolve({ id: 'testId', user_name: 'testUserName', is_admin: false, avatar: 'testAvatar' })
 })
 jest.doMock('../../../services/db-user-service', () => ({
   saveDiscordUserToDatabase: mockSaveDiscordUserToDatabase
 }))
 
-const mockGetJWTTokenForUser = jest.fn().mockImplementation((user) => {
+const mockGetJWTTokenForUser = jest.fn().mockImplementation(() => {
   return 'FAKEAUTHTOKEN'
 })
 jest.doMock('../../../services/token-service', () => ({
@@ -98,11 +98,15 @@ describe('discord', () => {
     })
   })
 
-  test('GET /login/:code saves user to database', async () => {
-    expect.assertions(2)
+  test('GET /login/:code returns user and auth token', async () => {
+    jest.useFakeTimers().setSystemTime(new Date('1970-01-01'))
+    expect.assertions(4)
     return await supertest(app).post(endPoint).expect(200).then(res => {
-      expect(mockSaveDiscordUserToDatabase.mock.calls.length).toEqual(1)
-      expect(mockGetJWTTokenForUser.mock.calls[0][0]).toEqual('FAKENEWUSER')
+      const expectedBody = { id: 'testId', user_name: 'testUserName', is_admin: false, avatar: 'testAvatar' }
+      expect(res.header['set-cookie'][0]).toContain('authorization=FAKEAUTHTOKEN')
+      expect(res.header['set-cookie'][0]).toContain('HttpOnly')
+      expect(res.header['set-cookie'][0]).toContain('Expires=Sat, 31 Jan 1970 00:00:00 GMT')
+      expect(res.body).toEqual(expectedBody)
     })
   })
 })
